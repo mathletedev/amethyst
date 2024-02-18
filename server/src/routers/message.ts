@@ -2,7 +2,7 @@ import { v4 as uuid } from "uuid";
 import { z } from "zod";
 
 import db from "../lib/db";
-import { rizzbot } from "../lib/openai";
+import { rizzbot } from "../lib/rizzbot";
 import { procedure, router } from "../lib/trpc";
 import { getUser } from "../lib/utils";
 
@@ -29,16 +29,10 @@ export const messageRouter = router({
 				[uuid(), user.id, input.to, input.content]
 			);
 
-			const completion = await rizzbot.completions.create({
-				messages: [
-					{
-						role: "system",
-						content: "You are a dating guru, provide a follow-up line:"
-					},
-					{ role: "user", content: input.content }
-				],
-				model: "gpt-3.5-turbo"
-			});
+			const result = await rizzbot.generateContent(
+				`You are a dating guru, provide a follow-up line for the following: ${input.content}`
+			);
+			const response = result.response;
 
 			db.query(
 				`
@@ -49,7 +43,7 @@ export const messageRouter = router({
 			VALUES (
 				$1, $2, $3, $4
 			);`,
-				[uuid(), user.id, input.to, completion.choices[0].message]
+				[uuid(), user.id, input.to, response.text()]
 			);
 		})
 });
