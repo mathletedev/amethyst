@@ -48,13 +48,15 @@
 		</div>
 		<div class="mt-3 flex justify-between items-center">
 			<div>
-				<a href="signup" class="font-semibold">Make New Account?</a>
+				<a href="signup" class="font-semibold hover:text-amethyst-300"
+					>Make New Account?</a
+				>
 			</div>
 		</div>
 		<div class="mt-5">
 			<button
 				type="submit"
-				class="bg-amethyst-200 text-white py-1 w-full rounded-md hover:bg-transparent hover:text-indigo-700 font-semibold"
+				class="bg-amethyst-200 text-white py-1 w-full rounded-md hover:bg-amethyst-100 font-semibold transition-colors"
 				><i class="fa-solid fa-right-to-bracket"></i>&nbsp;&nbsp;Login</button
 			>
 		</div>
