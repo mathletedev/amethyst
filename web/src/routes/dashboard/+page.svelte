@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Contact from "../../components/Contact.svelte";
 </script>
 
 <div id="dashboard-root" class="flex">
@@ -22,8 +23,11 @@
 			</div>
 		</div>
 		<div id="messages" class="flex flex-grow flex-col p-5">
+			<div class="text-xl">Messages</div>
 			<!--Insert Contacts Here-->
-			Messages
+			<Contact></Contact>
+			<Contact></Contact>
+			<Contact></Contact>
 		</div>
 	</div>
 
