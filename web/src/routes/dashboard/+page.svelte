@@ -27,17 +27,46 @@
 		</div>
 	</div>
 
-	<div id="right-container" class="flex flex-col h-full w-2/3 fixed right-0">
-		<div id="info" class="flex h-[90vh] p-10 bg-purple-100">
-			<div id="dashboard-image">image</div>
-			<div class="dashboard-info">
-				<div>Name</div>
-				<div>age</div>
-				<div>info stuff</div>
+	<div
+		id="right-container"
+		class="flex flex-col h-full w-2/3 fixed right-0 bg-purple-100"
+	>
+		<div id="person" class="flex align-center justify-center h-[90vh] p-10">
+			<div
+				id="person-image"
+				class="w-[35%] h-[100%] overflow-hidden rounded-3xl"
+			>
+				<img
+					alt="Image of Person"
+					src="person.png"
+					class="object-cover w-full h-full"
+				/>
 			</div>
-			<button> no </button>
-			<button> yes </button>
+			<div id="right-of-image" class="flex flex-col ml-4 w-[250px]">
+				<div
+					id="person-info"
+					class="justify-top h-[85%] p-5 rounded-3xl bg-purple-200"
+				>
+					<div>Name</div>
+					<div>age</div>
+					<div>info stuff</div>
+				</div>
+				<div id="yes-no-buttons" class="flex items-stretch mt-4 h-[12%]">
+					<button
+						id="dislike"
+						class="flex items-center justify-center w-full bg-purple-200 mr-2 rounded-xl"
+					>
+						<img alt="dislike icon" src="x-icon.png" class="w-6 h-6" />
+					</button>
+					<button
+						id="like"
+						class="flex items-center justify-center w-full bg-purple-200 ml-2 rounded-xl"
+					>
+						<img alt="like icon" src="heart-icon.png" class="w-7 h-7" />
+					</button>
+				</div>
+			</div>
 		</div>
-		<div>controls</div>
+		<div id="controls-info" class="flex h-[10vh] bg-purple-200">controls</div>
 	</div>
 </div>
