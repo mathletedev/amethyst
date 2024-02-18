@@ -25,9 +25,11 @@
 		<div id="messages" class="flex flex-grow flex-col p-5">
 			<div class="text-xl">Messages</div>
 			<!--Insert Contacts Here-->
-			<Contact></Contact>
-			<Contact></Contact>
-			<Contact></Contact>
+			<div class="flex flex-col-reverse justify-bottom">
+				<Contact></Contact>
+				<Contact></Contact>
+				<Contact></Contact>
+			</div>
 		</div>
 	</div>
 
