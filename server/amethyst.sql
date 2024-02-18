@@ -17,3 +17,18 @@ CREATE TABLE images (
 	user_id UUID NOT NULL,
 	url TEXT NOT NULL
 );
+
+CREATE TABLE messages (
+	id UUID PRIMARY KEY,
+	sender_id UUID NOT NULL,
+	receiver_id UUID NOT NULL,
+	content TEXT NOT NULL,
+	created_at DATE NOT NULL DEFAULT CURRENT_DATE
+);
+
+CREATE TABLE matches (
+	id UUID PRIMARY KEY,
+	first_id UUID REFERENCES users(id),
+	second_id UUID REFERENCES users(id),
+	CONSTRAINT unique_match UNIQUE (first_id, second_id)
+);

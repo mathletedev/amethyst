@@ -7,10 +7,24 @@ import { COOKIE_NAME } from "../lib/constants";
 import db from "../lib/db";
 import { procedure, router } from "../lib/trpc";
 import { getUser } from "../lib/utils";
+import { User } from "../models";
 
 export const userRouter = router({
 	me: procedure.query(async ({ ctx }) => {
 		return await getUser(ctx);
+	}),
+	view: procedure.input(z.string()).query(async ({ input }) => {
+		const res = await db.query(
+			`SELECT id, username, first_name, last_name, bio, gender, birthdate FROM users WHERE id = $1;`,
+			[input]
+		);
+
+		if (!res.rows)
+			throw new TRPCError({
+				code: "NOT_FOUND"
+			});
+
+		return res.rows[0] as User;
 	}),
 	create: procedure
 		.input(
@@ -101,5 +115,42 @@ export const userRouter = router({
 				resolve(true);
 			})
 		);
+	}),
+	match: procedure.input(z.string()).mutation(async ({ input, ctx }) => {
+		const user = await getUser(ctx);
+
+		db.query(
+			"INSERT INTO matches (id, first_id, second_id) VALUES ($1, $2, $3);",
+			[uuid(), user.id, input]
+		);
+	}),
+	getMatches: procedure.query(async ({ ctx }) => {
+		const user = await getUser(ctx);
+
+		const res = await db.query(
+			`
+			SELECT
+				m1.second_id
+			FROM
+				matches m1
+			JOIN
+				matches m2 ON m1.first_id = m2.second_id AND m1.second_id = m2.first_id
+			WHERE
+				m1.first_id = $1;
+			`,
+			[user.id]
+		);
+
+		return res.rows.map(r => r.second_id);
+	}),
+	random: procedure.query(async ({ ctx }) => {
+		const user = await getUser(ctx);
+
+		const res = await db.query(
+			"SELECT id FROM users WHERE id != $1 AND ID NOT IN (SELECT second_id FROM matches WHERE first_id = $1) ORDER BY RANDOM() LIMIT 1;",
+			[user.id]
+		);
+
+		return res.rows[0].id;
 	})
 });

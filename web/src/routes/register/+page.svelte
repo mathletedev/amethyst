@@ -1,13 +1,15 @@
 <script lang="ts">
-	import { trpc } from "$lib/trpc";
 	import { setContext } from "svelte";
+
+	import { trpc } from "$lib/trpc";
+
 	import Interest from "../../components/Interest.svelte";
 
 	let username = "";
 	let password = "";
 	let firstName = "";
 	let lastName = "";
-	let birthdate = Date.now();
+	let birthdate = new Date();
 	let gender = "";
 	let targetGender = "";
 	let interests: string[] = [];
@@ -38,6 +40,15 @@
 
 	const register = async () => {
 		try {
+			await trpc.user.create.mutate({
+				username,
+				password,
+				first_name: firstName,
+				last_name: lastName,
+				birthdate,
+				gender,
+				target: targetGender
+			});
 			await trpc.user.logIn.query({ username, password });
 			window.location.assign("/dashboard");
 		} catch (err) {
@@ -125,7 +136,7 @@
 			<div
 				class="border w-[27.5%] text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600"
 			>
-				<select name="gender" id="gender">
+				<select name="gender" id="gender" bind:value={gender}>
 					<option value="M">Male</option>
 					<option value="F">Female</option>
 					<option value="O">Other</option>
@@ -140,7 +151,7 @@
 			<div
 				class="border w-[27.5%] text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600"
 			>
-				<select name="targetGender" id="targetGender">
+				<select name="targetGender" id="targetGender" bind:value={targetGender}>
 					<option value="M">Male</option>
 					<option value="F">Female</option>
 					<option value="O">Other</option>
