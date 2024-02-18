@@ -16,7 +16,13 @@ export const userRouter = router({
 		.input(
 			z.object({
 				username: z.string(),
-				password: z.string()
+				password: z.string(),
+				first_name: z.string(),
+				last_name: z.string(),
+				bio: z.string().optional(),
+				gender: z.string(),
+				target: z.string(),
+				birthdate: z.coerce.date()
 			})
 		)
 		.mutation(async ({ input }) => {
@@ -37,8 +43,25 @@ export const userRouter = router({
 			const hash = await argon2.hash(input.password);
 
 			await db.query(
-				"INSERT INTO users (id, username, password) VALUES ($1, $2, $3);",
-				[uuid(), input.username, hash]
+				`
+				INSERT INTO
+					users (
+						id, username, password, first_name, last_name, bio, gender, target, birthdate
+					)
+				VALUES (
+					$1, $2, $3, $4, $5, $6, $7, $8, $9
+				);`,
+				[
+					uuid(),
+					input.username,
+					hash,
+					input.first_name,
+					input.last_name,
+					input.bio,
+					input.gender,
+					input.target,
+					input.birthdate
+				]
 			);
 		}),
 	logIn: procedure
