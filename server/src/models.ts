@@ -14,3 +14,10 @@ export interface Image {
 	user_id: string;
 	url: string;
 }
+
+export interface Message {
+	id: string;
+	sender_id: string;
+	receiver_id: string;
+	content: string;
+}
