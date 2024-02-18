@@ -46,7 +46,7 @@
 		</div>
 		<div class="mt-3 flex justify-between items-center">
 			<div>
-				<a href="signup" class="font-semibold hover:text-amethyst-300"
+				<a href="register" class="font-semibold hover:text-amethyst-300"
 					>Make New Account?</a
 				>
 			</div>
