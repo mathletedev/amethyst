@@ -61,7 +61,7 @@ export const messageRouter = router({
 			WHERE
 				receiver_id = $1 AND sender_id = $1
 			ORDER BY
-				created_at;
+				created_at DESC;
 			`,
 			[user.id, input]
 		);
