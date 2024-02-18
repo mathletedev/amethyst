@@ -23,7 +23,7 @@
 </script>
 
 <button
-	class="flex items-center h-16 w-[95%] m-2 bg-purple-400 rounded-3xl p-2"
+	class="flex items-center h-16 w-[95%] m-2 bg-purple-100 rounded-3xl p-2 shadow-md"
 	on:click={onClick}
 >
 	<div id="person-image" class="w-10 h-10 m-2 rounded-full overflow-hidden">
