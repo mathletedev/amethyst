@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+	@apply text-amethyst-500;
+}
+
 body {
 	@apply h-max;
 }

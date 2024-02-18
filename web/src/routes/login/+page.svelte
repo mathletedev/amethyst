@@ -14,16 +14,16 @@
 	};
 </script>
 
-<div
-	class="mt-16 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-black text-center font-display"
+<h1
+	class="mt-24 text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl text-center font-display text-amethyst-300"
 >
 	Amethyst
-</div>
+</h1>
 
-<div class="mt-[100px] flex justify-center">
+<div class="mt-24 flex justify-center">
 	<form class="w-96 p-6 shadow-lg bg-white rounded-md py-8" on:submit={logIn}>
 		<h1 class="text-3xl block text-center font-semibold">
-			<i class="fa-solid fa-user"></i> Login
+			<i class="fa-solid fa-user"></i>Login
 		</h1>
 		<hr class="mt-3" />
 		<div class="mt-3">
@@ -48,15 +48,13 @@
 		</div>
 		<div class="mt-3 flex justify-between items-center">
 			<div>
-				<a href="signup" class="text-indigo-800 font-semibold"
-					>Make New Account?</a
-				>
+				<a href="signup" class="font-semibold">Make New Account?</a>
 			</div>
 		</div>
 		<div class="mt-5">
 			<button
 				type="submit"
-				class="border-2 border-indigo-700 bg-indigo-700 text-white py-1 w-full rounded-md hover:bg-transparent hover:text-indigo-700 font-semibold"
+				class="bg-amethyst-200 text-white py-1 w-full rounded-md hover:bg-transparent hover:text-indigo-700 font-semibold"
 				><i class="fa-solid fa-right-to-bracket"></i>&nbsp;&nbsp;Login</button
 			>
 		</div>
