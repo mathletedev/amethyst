@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { trpc } from "$lib/trpc";
+	import { setContext } from "svelte";
+	import Interest from "../../components/Interest.svelte";
 
 	let username = "";
 	let password = "";
@@ -10,6 +12,30 @@
 	let targetGender = "";
 	let interests: string[] = [];
 
+	let allInterests = [
+		"Baking",
+		"Chess",
+		"Coding",
+		"Cooking",
+		"Cricket",
+		"Cycling",
+		"Fishing",
+		"Football",
+		"Gaming",
+		"Gardening",
+		"Music",
+		"Painting",
+		"Photography",
+		"Reading",
+		"Running",
+		"Singing",
+		"Skiing",
+		"Soccer",
+		"Swimming",
+		"Tennis",
+		"Writing"
+	];
+
 	const register = async () => {
 		try {
 			await trpc.user.logIn.query({ username, password });
@@ -18,6 +44,16 @@
 			alert("Invalid credentials");
 		}
 	};
+
+	const addInterest = (interest: string) => {
+		interests.push(interest);
+	};
+
+	const removeInterest = (interest: string) => {
+		interests = interests.filter(e => e !== interest);
+	};
+
+	setContext("interest", { addInterest, removeInterest });
 </script>
 
 <title>Amethyst • Registration</title>
@@ -113,12 +149,24 @@
 			</div>
 		</div>
 
-		<div class="mt-5">
-			<button
-				type="submit"
-				class="bg-amethyst-200 text-white py-1.5 w-full rounded-md hover:bg-amethyst-100 font-semibold transition-colors"
-				><i class="fa-solid fa-right-to-bracket"></i>Create Account</button
+		<div class="mt-3">
+			<label for="interests" class="block text-base mb-2"
+				>Choose your top interests</label
 			>
+			<div class="grid grid-cols-2">
+				{#each allInterests as interest}
+					<Interest name={interest} />
+				{/each}
+			</div>
+			<div>
+				<div class="mt-5">
+					<button
+						type="submit"
+						class="bg-amethyst-200 text-white py-1.5 w-full rounded-md hover:bg-amethyst-100 font-semibold transition-colors"
+						><i class="fa-solid fa-right-to-bracket"></i>Create Account</button
+					>
+				</div>
+			</div>
 		</div>
 	</form>
 </div>
