@@ -55,8 +55,9 @@
 			<button
 				type="submit"
 				class="bg-amethyst-200 text-white py-1.5 w-full rounded-md hover:bg-amethyst-100 font-semibold transition-colors"
-				><i class="fa-solid fa-right-to-bracket"></i>&nbsp;&nbsp;Login</button
 			>
+				Login
+			</button>
 		</div>
 	</form>
 
