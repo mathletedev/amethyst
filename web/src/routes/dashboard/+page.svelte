@@ -1,5 +1,35 @@
 <script lang="ts">
 	import Contact from "../../components/Contact.svelte";
+    import { onMount } from "svelte";
+
+	function handleDislikeClicked() {
+		alert("dislike");
+	}
+	function handleLikeClicked() {
+		alert("like");
+	}
+
+	let arrowKeyPressed = false;
+
+	function handleKeyDown(event: KeyboardEvent) {
+		if (
+			event.key === "ArrowUp" ||
+			event.key === "ArrowDown" ||
+			event.key === "ArrowLeft" ||
+			event.key === "ArrowRight"
+		) {
+			arrowKeyPressed = true;
+			alert("arrow pressed");
+		}
+	}
+
+	onMount(() => {
+		window.addEventListener("keydown", handleKeyDown);
+
+		return () => {
+			window.removeEventListener("keydown", handleKeyDown);
+		};
+	});
 </script>
 
 <div id="dashboard-root" class="flex">
@@ -61,12 +91,14 @@
 					<button
 						id="dislike"
 						class="flex items-center justify-center w-full bg-purple-200 mr-2 rounded-xl"
+						on:click={handleDislikeClicked}
 					>
 						<img alt="dislike icon" src="x-icon.png" class="w-6 h-6" />
 					</button>
 					<button
 						id="like"
 						class="flex items-center justify-center w-full bg-purple-200 ml-2 rounded-xl"
+						on:click={handleLikeClicked}
 					>
 						<img alt="like icon" src="heart-icon.png" class="w-7 h-7" />
 					</button>
