@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from "svelte";
+	import { onMount, setContext } from "svelte";
 
 	import { trpc } from "$lib/trpc";
 	import type { Image, User } from "$lib/types";
@@ -11,49 +11,50 @@
 
 	let images: Image[] = [];
 
-	let target: User | null = null;
+	let target: User | undefined = undefined;
 	let targetImages: Image[] = [];
 
-	function handleDislikeClicked() {
-		alert("dislike");
-	}
-	function handleLikeClicked() {
-		alert("like");
-	}
+	let contacts: string[] = [];
+	let openId: string | null = null;
+
+	const handleDislikeClicked = () => {
+		newTarget();
+	};
+	const handleLikeClicked = async () => {
+		await trpc.user.match.mutate(target!.id);
+
+		newTarget();
+	};
 	async function handleSignOut() {
-        try{
-            await trpc.user.logOut.query();
-		    window.location.assign("/login");
-        } catch(err){
-            alert(err);
-        }
-        
-    }
-
-	let arrowKeyPressed = false;
-
-	function handleKeyDown(event: KeyboardEvent) {
-		if (
-			event.key === "ArrowUp" ||
-			event.key === "ArrowDown" ||
-			event.key === "ArrowLeft" ||
-			event.key === "ArrowRight"
-		) {
-			arrowKeyPressed = true;
-			alert("arrow pressed");
+		try {
+			await trpc.user.logOut.query();
+			window.location.assign("/login");
+		} catch (err) {
+			alert(err);
 		}
 	}
+
+	const newTarget = async () => {
+		try {
+			let targetId = await trpc.user.random.query();
+			target = await trpc.user.view.query(targetId);
+			targetImages = await trpc.image.view.query(targetId);
+
+			// force update
+			target = target;
+		} catch (err) {
+			target = data.user;
+		}
+	};
 
 	onMount(async () => {
 		if (!data.user) window.location.assign("/");
 
 		images = await trpc.image.mine.query();
-		let targetId = await trpc.user.random.query();
-		target = await trpc.user.view.query(targetId);
-		console.log(target);
-		targetImages = await trpc.image.view.query(targetId);
 
-		window.addEventListener("keydown", handleKeyDown);
+		await newTarget();
+
+		contacts = await trpc.user.getMatches.query();
 	});
 
 	const getAge = (birthdate: any) => {
@@ -66,6 +67,12 @@
 		}
 		return age;
 	};
+
+	const openMessages = (contactId: string) => {
+		openId = contactId;
+	};
+
+	setContext("message", { openMessages });
 </script>
 
 <div id="dashboard-root" class="flex">
@@ -103,78 +110,82 @@
 		<div id="messages" class="flex flex-grow flex-col p-5">
 			<div class="text-xl">Messages</div>
 			<!--Insert Contacts Here-->
-			<div class="flex flex-col-reverse justify-bottom">
-				<Contact></Contact>
-				<Contact></Contact>
-				<Contact></Contact>
+			<div class="flex flex-col justify-bottom">
+				{#each contacts as contactId}
+					<Contact {contactId} />
+				{/each}
 			</div>
 		</div>
 	</div>
 
-	<div
-		id="right-container"
-		class="flex flex-col h-full w-2/3 fixed right-0 bg-purple-100"
-	>
-		<div id="person" class="flex align-center justify-center h-[90vh] p-10">
-			<div
-				id="person-image"
-				class="w-[35%] h-[100%] overflow-hidden rounded-3xl"
-			>
-				<img
-					alt="Person"
-					src={targetImages[0]?.url || "person.png"}
-					class="object-cover w-full h-full"
-				/>
-			</div>
-			<div id="right-of-image" class="flex flex-col ml-4 w-[250px]">
-				<div
-					id="person-info"
-					class="justify-top h-[85%] p-5 rounded-3xl bg-purple-200"
-				>
-					<div>{target?.first_name} {target?.last_name}</div>
-					<div>
-						{getAge(target?.birthdate || 0)}
-					</div>
-					<div>{target?.bio || ""}</div>
-				</div>
-				<div id="yes-no-buttons" class="flex items-stretch mt-4 h-[12%]">
-					<button
-						id="dislike"
-						class="flex items-center justify-center w-full bg-purple-200 mr-2 rounded-xl"
-						on:click={handleDislikeClicked}
-					>
-						<img alt="dislike icon" src="x-icon.png" class="w-6 h-6" />
-					</button>
-					<button
-						id="like"
-						class="flex items-center justify-center w-full bg-purple-200 ml-2 rounded-xl"
-						on:click={handleLikeClicked}
-					>
-						<img alt="like icon" src="heart-icon.png" class="w-7 h-7" />
-					</button>
-				</div>
-			</div>
-		</div>
+	{#if openId === null}
 		<div
-			id="controls-info"
-			class="flex items-center justify-center h-[10vh] bg-purple-200"
+			id="right-container"
+			class="flex flex-col h-full w-2/3 fixed right-0 bg-purple-100"
 		>
-			<div id="info-dislike" class="flex items-center flex-row mx-2">
-				<img
-					alt="<-"
-					src="left-arrow-icon.png"
-					class="border-black border-2 p-2 w-10 h-10 mx-2 rounded-md"
-				/>
-				<div>dislike</div>
+			<div id="person" class="flex align-center justify-center h-[90vh] p-10">
+				<div
+					id="person-image"
+					class="w-[35%] h-[100%] overflow-hidden rounded-3xl"
+				>
+					<img
+						alt="Person"
+						src={targetImages[0]?.url || "person.png"}
+						class="object-cover w-full h-full"
+					/>
+				</div>
+				<div id="right-of-image" class="flex flex-col ml-4 w-[250px]">
+					<div
+						id="person-info"
+						class="justify-top h-[85%] p-5 rounded-3xl bg-purple-200"
+					>
+						<div>{target?.first_name} {target?.last_name}</div>
+						<div>
+							{getAge(target?.birthdate || 0)}
+						</div>
+						<div>{target?.bio || ""}</div>
+					</div>
+					<div id="yes-no-buttons" class="flex items-stretch mt-4 h-[12%]">
+						<button
+							id="dislike"
+							class="flex items-center justify-center w-full bg-purple-200 mr-2 rounded-xl"
+							on:click={handleDislikeClicked}
+						>
+							<img alt="dislike icon" src="x-icon.png" class="w-6 h-6" />
+						</button>
+						<button
+							id="like"
+							class="flex items-center justify-center w-full bg-purple-200 ml-2 rounded-xl"
+							on:click={handleLikeClicked}
+						>
+							<img alt="like icon" src="heart-icon.png" class="w-7 h-7" />
+						</button>
+					</div>
+				</div>
 			</div>
-			<div id="info-like" class="flex items-center flex-row mx-2">
-				<img
-					alt="->"
-					src="right-arrow-icon.png"
-					class="border-black border-2 p-2 w-10 h-10 mx-2 rounded-md"
-				/>
-				<div>like</div>
+			<div
+				id="controls-info"
+				class="flex items-center justify-center h-[10vh] bg-purple-200"
+			>
+				<div id="info-dislike" class="flex items-center flex-row mx-2">
+					<img
+						alt="<-"
+						src="left-arrow-icon.png"
+						class="border-black border-2 p-2 w-10 h-10 mx-2 rounded-md"
+					/>
+					<div>dislike</div>
+				</div>
+				<div id="info-like" class="flex items-center flex-row mx-2">
+					<img
+						alt="->"
+						src="right-arrow-icon.png"
+						class="border-black border-2 p-2 w-10 h-10 mx-2 rounded-md"
+					/>
+					<div>like</div>
+				</div>
 			</div>
 		</div>
-	</div>
+	{:else}
+		<p>test</p>
+	{/if}
 </div>

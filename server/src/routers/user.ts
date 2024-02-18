@@ -15,7 +15,7 @@ export const userRouter = router({
 	}),
 	view: procedure.input(z.string()).query(async ({ input }) => {
 		const res = await db.query(
-			`SELECT username, first_name, last_name, bio, gender, birthdate FROM users WHERE id = $1;`,
+			`SELECT id, username, first_name, last_name, bio, gender, birthdate FROM users WHERE id = $1;`,
 			[input]
 		);
 
@@ -119,15 +119,15 @@ export const userRouter = router({
 	match: procedure.input(z.string()).mutation(async ({ input, ctx }) => {
 		const user = await getUser(ctx);
 
-		db.query("INSERT INTO matches (first_id, second_id) VALUES ($1, $2);", [
-			user.id,
-			input
-		]);
+		db.query(
+			"INSERT INTO matches (id, first_id, second_id) VALUES ($1, $2, $3);",
+			[uuid(), user.id, input]
+		);
 	}),
 	getMatches: procedure.query(async ({ ctx }) => {
 		const user = await getUser(ctx);
 
-		return await db.query(
+		const res = await db.query(
 			`
 			SELECT
 				m1.second_id
@@ -140,12 +140,14 @@ export const userRouter = router({
 			`,
 			[user.id]
 		);
+
+		return res.rows.map(r => r.second_id);
 	}),
 	random: procedure.query(async ({ ctx }) => {
 		const user = await getUser(ctx);
 
 		const res = await db.query(
-			"SELECT id FROM users WHERE id != $1 ORDER BY RANDOM() LIMIT 1;",
+			"SELECT id FROM users WHERE id != $1 AND ID NOT IN (SELECT second_id FROM matches WHERE first_id = $1) ORDER BY RANDOM() LIMIT 1;",
 			[user.id]
 		);
 
