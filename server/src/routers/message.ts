@@ -1,3 +1,4 @@
+import { rizzbot } from "lib/openai";
 import { v4 as uuid } from "uuid";
 import { z } from "zod";
 
@@ -25,7 +26,30 @@ export const messageRouter = router({
 			VALUES (
 				$1, $2, $3, $4
 			);`,
-				[uuid, user.id, input.to, input.content]
+				[uuid(), user.id, input.to, input.content]
+			);
+
+			const completion = await rizzbot.completions.create({
+				messages: [
+					{
+						role: "system",
+						content: "You are a dating guru, provide a follow-up line:"
+					},
+					{ role: "user", content: input.content }
+				],
+				model: "gpt-3.5-turbo"
+			});
+
+			db.query(
+				`
+			INSERT INTO
+				messages (
+					id, sender_id, receiver_id, content
+				)
+			VALUES (
+				$1, $2, $3, $4
+			);`,
+				[uuid(), user.id, input.to, completion.choices[0].message]
 			);
 		})
 });
