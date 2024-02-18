@@ -20,6 +20,15 @@
 	function handleLikeClicked() {
 		alert("like");
 	}
+	async function handleSignOut() {
+        try{
+            await trpc.user.logOut.query();
+		    window.location.assign("/login");
+        } catch(err){
+            alert(err);
+        }
+        
+    }
 
 	let arrowKeyPressed = false;
 
@@ -47,7 +56,7 @@
 		window.addEventListener("keydown", handleKeyDown);
 	});
 
-	const getAge = birthdate => {
+	const getAge = (birthdate: any) => {
 		var today = new Date();
 		var date = new Date(birthdate);
 		var age = today.getFullYear() - date.getFullYear();
@@ -65,7 +74,7 @@
 		class="flex flex-col bg-purple-500 h-full w-1/3 fixed left-0"
 	>
 		<div id="header" class="flex overflow-hidden h-1/6 bg-purple-600">
-			<div id="user-data" class="flex flex-row p-3">
+			<div id="user-data" class="flex flex-row w-2/3 p-3">
 				<div
 					id="profile-picture"
 					class="w-16 h-16 m-2 rounded-full overflow-hidden"
@@ -84,6 +93,11 @@
 					</div>
 					<div id="username" class="text-xs">{data.user?.username}</div>
 				</div>
+			</div>
+			<div id="settings" class="w-1/3 flex justify-end">
+				<button on:click={handleSignOut} class="h-[0%] mt-2 mr-2 underline"
+					>Sign Out</button
+				>
 			</div>
 		</div>
 		<div id="messages" class="flex flex-grow flex-col p-5">
