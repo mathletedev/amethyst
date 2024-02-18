@@ -21,10 +21,8 @@
 </h1>
 
 <div class="mt-24 flex justify-center">
-	<form class="w-96 p-6 shadow-lg bg-white rounded-md py-8" on:submit={logIn}>
-		<h1 class="text-3xl block text-center font-semibold">
-			<i class="fa-solid fa-user"></i>Login
-		</h1>
+	<form class="w-96 p-6 shadow-lg rounded-md py-8" on:submit={logIn}>
+		<h1 class="text-3xl block text-center font-semibold">Login</h1>
 		<hr class="mt-3" />
 		<div class="mt-3">
 			<label for="username" class="block text-base mb-2">Username</label>
@@ -56,7 +54,7 @@
 		<div class="mt-5">
 			<button
 				type="submit"
-				class="bg-amethyst-200 text-white py-1 w-full rounded-md hover:bg-amethyst-100 font-semibold transition-colors"
+				class="bg-amethyst-200 text-white py-1.5 w-full rounded-md hover:bg-amethyst-100 font-semibold transition-colors"
 				><i class="fa-solid fa-right-to-bracket"></i>&nbsp;&nbsp;Login</button
 			>
 		</div>
@@ -65,13 +63,8 @@
 	<figure class="max-w-lg contrast-more ml-6">
 		<img
 			class="h-auto max-w-full rounded-lg"
-			src="Happy_Couple.jpg"
+			src="happy_couple.png"
 			alt="Happy Couple"
 		/>
-		<figcaption
-			class="mt-2 text-sm text-center text-black-500 dark:text-black-400"
-		>
-			You could be this like this Happy Couple!!!
-		</figcaption>
 	</figure>
 </div>
