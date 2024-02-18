@@ -23,12 +23,12 @@
 <title>Amethyst • Registration</title>
 
 <h1
-	class="mt-24 text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl text-center font-display text-amethyst-300"
+	class="mt-20 text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl text-center font-display text-amethyst-300"
 >
 	Amethyst
 </h1>
 
-<div class="mt-24 mb-20 flex justify-center">
+<div class="mt-20 mb-20 flex justify-center">
 	<form class="w-96 p-6 shadow-lg rounded-md py-8" on:submit={register}>
 		<h1 class="text-3xl block text-center font-semibold">Registration</h1>
 		<hr class="mt-3" />
