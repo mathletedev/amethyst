@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 body {
-	@apply h-max bg-purple;
+	@apply h-max;
 }

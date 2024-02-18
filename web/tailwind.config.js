@@ -4,7 +4,7 @@ export default {
 	theme: {
 		extend: {
 			colors: {
-				purple: "#bf00ff"
+				amethyst: "#bf00ff"
 			}
 		}
 	},
