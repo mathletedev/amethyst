@@ -1,8 +1,8 @@
-import { rizzbot } from "lib/openai";
 import { v4 as uuid } from "uuid";
 import { z } from "zod";
 
 import db from "../lib/db";
+import { rizzbot } from "../lib/openai";
 import { procedure, router } from "../lib/trpc";
 import { getUser } from "../lib/utils";
 
