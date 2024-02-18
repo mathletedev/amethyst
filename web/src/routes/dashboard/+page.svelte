@@ -67,6 +67,26 @@
 				</div>
 			</div>
 		</div>
-		<div id="controls-info" class="flex h-[10vh] bg-purple-200">controls</div>
+		<div
+			id="controls-info"
+			class="flex items-center justify-center h-[10vh] bg-purple-200"
+		>
+			<div id="info-dislike" class="flex items-center flex-row mx-2">
+				<img
+					alt="<-"
+					src="left-arrow-icon.png"
+					class="border-black border-2 p-2 w-10 h-10 mx-2 rounded-md"
+				/>
+				<div>dislike</div>
+			</div>
+			<div id="info-like" class="flex items-center flex-row mx-2">
+				<img
+					alt="->"
+					src="right-arrow-icon.png"
+					class="border-black border-2 p-2 w-10 h-10 mx-2 rounded-md"
+				/>
+				<div>like</div>
+			</div>
+		</div>
 	</div>
 </div>
