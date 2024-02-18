@@ -6,15 +6,24 @@
 		id="left-container"
 		class="flex flex-col bg-purple-500 h-full w-1/3 fixed left-0"
 	>
-		<div
-			id="header"
-			class="flex items-center justify-center h-1/6 bg-purple-600"
-		>
-			header
+		<div id="header" class="flex overflow-hidden h-1/6 bg-purple-600">
+			<div id="user-data" class="flex flex-row p-3">
+				<div
+					id="profile-picture"
+					class="w-16 h-16 m-2 rounded-full overflow-hidden"
+				>
+					<!--Change to load user picture-->
+					<img alt="Profile Picture" src="image.png" />
+				</div>
+				<div id="user-data" class="flex flex-col">
+					<div id="name" class="text-2xl m-0 pt-3">name</div>
+					<div id="username" class="text-xs">username</div>
+				</div>
+			</div>
 		</div>
-		<div id="dashboard-messages" class="flex flex-grow flex-col p-5">
+		<div id="messages" class="flex flex-grow flex-col p-5">
 			<!--Insert Contacts Here-->
-            Messages
+			Messages
 		</div>
 	</div>
 
