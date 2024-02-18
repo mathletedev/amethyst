@@ -2,7 +2,7 @@
 	import { onMount } from "svelte";
 
 	import { trpc } from "$lib/trpc";
-	import type { Image } from "$lib/types";
+	import type { Image, User } from "$lib/types";
 
 	import Contact from "../../components/Contact.svelte";
 	import type { PageData } from "../$types";
@@ -10,6 +10,9 @@
 	export let data: PageData;
 
 	let images: Image[] = [];
+
+	let target: User | null = null;
+	let targetImages: Image[] = [];
 
 	function handleDislikeClicked() {
 		alert("dislike");
@@ -36,10 +39,24 @@
 		if (!data.user) window.location.assign("/");
 
 		images = await trpc.image.mine.query();
-		console.log(images);
+		let targetId = await trpc.user.random.query();
+		target = await trpc.user.view.query(targetId);
+		console.log(target);
+		targetImages = await trpc.image.view.query(targetId);
 
 		window.addEventListener("keydown", handleKeyDown);
 	});
+
+	const getAge = birthdate => {
+		var today = new Date();
+		var date = new Date(birthdate);
+		var age = today.getFullYear() - date.getFullYear();
+		var m = today.getMonth() - date.getMonth();
+		if (m < 0 || (m === 0 && today.getDate() < date.getDate())) {
+			age--;
+		}
+		return age;
+	};
 </script>
 
 <div id="dashboard-root" class="flex">
@@ -89,16 +106,22 @@
 				id="person-image"
 				class="w-[35%] h-[100%] overflow-hidden rounded-3xl"
 			>
-				<img alt="Person" src="person.png" class="object-cover w-full h-full" />
+				<img
+					alt="Person"
+					src={targetImages[0]?.url || "person.png"}
+					class="object-cover w-full h-full"
+				/>
 			</div>
 			<div id="right-of-image" class="flex flex-col ml-4 w-[250px]">
 				<div
 					id="person-info"
 					class="justify-top h-[85%] p-5 rounded-3xl bg-purple-200"
 				>
-					<div>Name</div>
-					<div>age</div>
-					<div>info stuff</div>
+					<div>{target?.first_name} {target?.last_name}</div>
+					<div>
+						{getAge(target?.birthdate || 0)}
+					</div>
+					<div>{target?.bio || ""}</div>
 				</div>
 				<div id="yes-no-buttons" class="flex items-stretch mt-4 h-[12%]">
 					<button
