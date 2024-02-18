@@ -45,5 +45,27 @@ export const messageRouter = router({
 			);`,
 				[uuid(), user.id, input.to, response.text()]
 			);
-		})
+		}),
+	getMessages: procedure.input(z.string()).query(async ({ input, ctx }) => {
+		const user = await getUser(ctx);
+
+		const res = await db.query(
+			`
+			SELECT * FROM
+				messages
+			WHERE
+				sender_id = $1 AND receiver_id = $2
+			UNION
+			SELECT * FROM
+				messages
+			WHERE
+				receiver_id = $1 AND sender_id = $1
+			ORDER BY
+				created_at;
+			`,
+			[user.id, input]
+		);
+
+		return res.rows;
+	})
 });

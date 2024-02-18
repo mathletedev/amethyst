@@ -22,7 +22,8 @@ CREATE TABLE messages (
 	id UUID PRIMARY KEY,
 	sender_id UUID NOT NULL,
 	receiver_id UUID NOT NULL,
-	content TEXT NOT NULL
+	content TEXT NOT NULL,
+	created_at DATE NOT NULL DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE matches (
