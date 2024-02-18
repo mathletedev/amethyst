@@ -1,6 +1,15 @@
 <script lang="ts">
+	import { onMount } from "svelte";
+
+	import { trpc } from "$lib/trpc";
+	import type { Image } from "$lib/types";
+
 	import Contact from "../../components/Contact.svelte";
-    import { onMount } from "svelte";
+	import type { PageData } from "../$types";
+
+	export let data: PageData;
+
+	let images: Image[] = [];
 
 	function handleDislikeClicked() {
 		alert("dislike");
@@ -23,12 +32,13 @@
 		}
 	}
 
-	onMount(() => {
-		window.addEventListener("keydown", handleKeyDown);
+	onMount(async () => {
+		if (!data.user) window.location.assign("/");
 
-		return () => {
-			window.removeEventListener("keydown", handleKeyDown);
-		};
+		images = await trpc.image.mine.query();
+		console.log(images);
+
+		window.addEventListener("keydown", handleKeyDown);
 	});
 </script>
 
@@ -44,11 +54,18 @@
 					class="w-16 h-16 m-2 rounded-full overflow-hidden"
 				>
 					<!--Change to load user picture-->
-					<img alt="Profile Picture" src="image.png" />
+					<img
+						alt="Profile"
+						src={images[0]?.url ||
+							"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png"}
+					/>
 				</div>
 				<div id="user-data" class="flex flex-col">
-					<div id="name" class="text-2xl m-0 pt-3">name</div>
-					<div id="username" class="text-xs">username</div>
+					<div id="name" class="text-2xl m-0 pt-3">
+						{data.user?.first_name}
+						{data.user?.last_name}
+					</div>
+					<div id="username" class="text-xs">{data.user?.username}</div>
 				</div>
 			</div>
 		</div>
@@ -72,11 +89,7 @@
 				id="person-image"
 				class="w-[35%] h-[100%] overflow-hidden rounded-3xl"
 			>
-				<img
-					alt="Image of Person"
-					src="person.png"
-					class="object-cover w-full h-full"
-				/>
+				<img alt="Person" src="person.png" class="object-cover w-full h-full" />
 			</div>
 			<div id="right-of-image" class="flex flex-col ml-4 w-[250px]">
 				<div

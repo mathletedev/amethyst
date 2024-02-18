@@ -1,6 +1,9 @@
+import { config } from "dotenv-safe";
 import { Pool } from "pg";
 
 import { logger } from "./logger";
+
+config();
 
 const pool = new Pool();
 
