@@ -1,3 +1,5 @@
+import defaultTheme from "tailwindcss/defaultTheme";
+
 /** @type {import('tailwindcss').Config} */
 export default {
 	content: ["./src/**/*.{html,js,svelte,ts}"],
@@ -5,6 +7,10 @@ export default {
 		extend: {
 			colors: {
 				amethyst: "#bf00ff"
+			},
+			fontFamily: {
+				sans: ["Quicksand", ...defaultTheme.fontFamily.sans],
+				display: ["Kaushan Script"]
 			}
 		}
 	},
